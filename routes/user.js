@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { userModel } = require("../db");
 const jwt = require("jsonwebtoken");
-const JWT_USER_SECRET = "dfhaewuirgui3qRHG786";
+require('dotenv').config();
 
 const userRouter = Router();
 
@@ -34,7 +34,7 @@ userRouter.post("/signin", async function(req, res){
     if(user){
         const token = jwt.sign({
             id: user._id
-        }, JWT_USER_SECRET);
+        }, process.env.JWT_USER_SECRET);
 
         res.json({
             token: token
