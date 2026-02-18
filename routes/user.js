@@ -1,8 +1,8 @@
 const { Router } = require("express");
-const { userModel } = require("../db");
+const { userModel, purchaseModel } = require("../db");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
-
+const { userMiddleware } = require("../middleware/user");
 const userRouter = Router();
 
 userRouter.post("/signup", async function(req, res){
@@ -47,8 +47,17 @@ userRouter.post("/signin", async function(req, res){
     
 })
 
-userRouter.get("/purchases", function(req, res){
+userRouter.get("/purchases", userMiddleware, async function(req, res){
     
+    const userId = req.userId;
+
+    const courses = await purchaseModel.find({
+        userId
+    });
+
+    res.json({
+        courses
+    })
 })
 
 module.exports = {
